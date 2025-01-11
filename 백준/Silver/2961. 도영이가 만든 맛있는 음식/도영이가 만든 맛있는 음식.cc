@@ -1,52 +1,32 @@
 #include <bits/stdc++.h>
-#include <unordered_map>
 using namespace std;
 typedef long long ll;
-typedef long double lb;
-
-vector<ll>A;
-vector<ll>B;
-ll result = LLONG_MAX;
-int N = 0;
-
-void dfs(int mask = 0, ll ataste = LLONG_MAX, ll btaste = INT_MAX)
-{
-	result = min(result, llabs(ataste - btaste));
-	if (mask == (1 << N) - 1)
-	{
-		return;
-	}
-	for (int i = 0; i < N; ++i)
-	{
-		if (!(mask & (1 << i)))
-		{
-			if (!i)
-			{
-				ataste = 1, btaste = 0;
-			}
-			dfs(mask |= (1 << i), ataste * A[i], btaste + B[i]);
-		}
-	}
-}
+typedef pair<ll, ll> pll;
 
 int main(void)
 {
-	ios::sync_with_stdio(false);
-	cin.tie(0);
-	cin >> N;
-	A.resize(N);
-	B.resize(N);
-	for (int i = 0; i < N; ++i)
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<pll>v(n);
+	for (auto& [a, b] : v)
 	{
-		cin >> A[i] >> B[i];
-		result = min(llabs(A[i] - B[i]), result);
+		cin >> a >> b;
 	}
-	if (!result)
+	ll ans = LLONG_MAX;
+	for (int i = 1; i < (1 << n); ++i)
 	{
-		cout << 0;
-		return 0;
+		ll sour = 1, bitter = 0;
+		for (int j = 0; j < n; ++j)
+		{
+			if (i & (1 << j))
+			{
+				sour *= v[j].first;
+				bitter += v[j].second;
+			}
+		}
+		ans = min(ans, llabs(sour - bitter));
 	}
-	dfs();
-	cout << result;
+	cout << ans;
 	return 0;
 }
