@@ -5,43 +5,59 @@ typedef long long ll;
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
-	ll n = 0, mini = LLONG_MAX;
+	ll n = 0;
 	cin >> n;
-	map<ll, ll>mm;
+	unordered_map<ll, ll>mm;
+	vector<ll>v;
 	for (int i = 0; i < n * n; ++i)
 	{
 		ll temp = 0;
 		cin >> temp;
-		mini = min(temp, mini);
+		if (!mm[temp])
+		{
+			v.push_back(temp);
+		}
 		mm[temp]++;
 	}
-	ll p = (ll)sqrt(mini), p1 = mini;
+	sort(v.begin(), v.end());
+	auto fail = [&]
+		{
+			cout << "NO";
+			exit(0);
+		};
+	auto check = [&](ll a, ll b)
+		{
+			if (a > LLONG_MAX / b || mm[a * b] < 0)
+			{
+				return true;
+			}
+			return false;
+		};
+	ll p = (ll)sqrt(v[0]), p1 = v[0];
 	mm[p1]--;
-	if (mm[p1] < 0 || p > LLONG_MAX / p || p * p != p1)
+	if (check(p, p) || p * p != p1)
 	{
-		cout << "NO";
-		return 0;
+		fail();
 	}
 	vector<ll>ans;
 	ans.push_back(p);
-	for (auto& [a, b] : mm)
+	for (auto& i : v)
 	{
-		while (b > 0)
+		while (mm[i] > 0)
 		{
-			ll pivot = a / p;
+			ll pivot = i / p;
 			for (auto& j : ans)
 			{
 				mm[pivot * j] -= 2;
-				if (pivot > LLONG_MAX / j || mm[pivot * j] < 0)
+				if (check(pivot, j))
 				{
-					cout << "NO";
-					return 0;
+					fail();
 				}
 			}
-			if (pivot > LLONG_MAX / pivot || --mm[pivot * pivot] < 0)
+			--mm[pivot * pivot];
+			if (check(pivot, pivot))
 			{
-				cout << "NO";
-				return 0;
+				fail();
 			}
 			ans.push_back(pivot);
 		}
