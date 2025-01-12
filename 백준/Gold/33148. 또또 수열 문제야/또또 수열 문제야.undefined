@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, mini = LLONG_MAX;
+	cin >> n;
+	map<ll, ll>mm;
+	for (int i = 0; i < n * n; ++i)
+	{
+		ll temp = 0;
+		cin >> temp;
+		mini = min(temp, mini);
+		mm[temp]++;
+	}
+	ll p = (ll)sqrt(mini), p1 = mini;
+	mm[p1]--;
+	if (mm[p1] < 0 || p > LLONG_MAX / p || p * p != p1)
+	{
+		cout << "NO";
+		return 0;
+	}
+	vector<ll>ans;
+	ans.push_back(p);
+	for (auto& [a, b] : mm)
+	{
+		while (b > 0)
+		{
+			ll pivot = a / p;
+			for (auto& j : ans)
+			{
+				mm[pivot * j] -= 2;
+				if (pivot > LLONG_MAX / j || mm[pivot * j] < 0)
+				{
+					cout << "NO";
+					return 0;
+				}
+			}
+			if (pivot > LLONG_MAX / pivot || --mm[pivot * pivot] < 0)
+			{
+				cout << "NO";
+				return 0;
+			}
+			ans.push_back(pivot);
+		}
+	}
+	cout << "YES" << '\n';
+	for (auto& i : ans)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}
