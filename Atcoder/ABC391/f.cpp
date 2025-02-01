@@ -62,7 +62,6 @@ int main(void)
 				visited.insert(nxt);
 				pq.push(make_tuple(sv(nxt), idx + 1, jdx, kdx));
 			}
-
 		}
 		if (jdx + 1 < n)
 		{
