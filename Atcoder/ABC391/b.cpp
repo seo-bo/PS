@@ -9,7 +9,6 @@ int main(void)
 	cin >> n >> m;
 	vector<vector<char>>v(n, vector<char>(n));
 	vector<vector<char>>base(m, vector<char>(m));
-
 	for (int i = 0; i < n; ++i)
 	{
 		string str;
