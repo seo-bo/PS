@@ -18,7 +18,7 @@ int main(void)
 			}
 		}
 	}
-	vector<ll>base(1000001, 0);
+	vector<int>base(1000001, 0);
 	for (int i = 2; i <= 1000000; ++i)
 	{
 		if (prime[i])
@@ -26,7 +26,7 @@ int main(void)
 			base[i]++;
 		}
 	}
-	auto sv = [&](vector<ll>& v1, vector<ll>& v2)
+	auto sv = [&](vector<int>& v1, vector<int>& v2)
 		{
 			int siz = 1;
 			while (siz < (int)v1.size() + (int)v2.size())
@@ -83,14 +83,14 @@ int main(void)
 				aa[i] *= bb[i];
 			}
 			fft(aa, -1);
-			vector<ll>res;
+			vector<int>res;
 			for (auto& i : aa)
 			{
-				res.push_back((ll)round(i.real()));
+				res.push_back((int)round(i.real()));
 			}
 			return res;
 		};
-	vector<ll>ans = sv(base, base);
+	vector<int>ans = sv(base, base);
 	int q = 0;
 	cin >> q;
 	while (q--)
