@@ -5,9 +5,9 @@
 TARGET_DIR="${1:-.}"
 
 # find를 사용하여 ".undefined"로 끝나는 파일 찾기
-find "$TARGET_DIR" -type f -name "*.cc" | while read -r file; do
+find "$TARGET_DIR" -type f -name "*.undefined" | while read -r file; do
     # 새로운 파일명 생성 (.cc 확장자로 변경)
-    new_name="${file%.cc}.cpp"
+    new_name="${file%.undefined}.cpp"
     
     # 파일명 변경
     mv "$file" "$new_name"
