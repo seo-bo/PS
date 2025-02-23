@@ -18,7 +18,7 @@
 
 <p>욱제는 🎄포화이진트리🎄를 종이에 그렸다. 노드에 정수 가중치도 채워 넣었다. 욱제는 적당한 직사각형 영역을 잡아서, 영역 내에 있는 노드들의 가중치 합을 최대로 하고 싶다. 직사각형은 하나 이상의 노드를 포함해야 하고 직사각형은 비뚤어지면 안 된다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/89dac5d1-9f04-4037-89b0-4f183acb6c0e/-/preview/" style="width: 642px; height: 700px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 642px; height: 700px;"></p>
 
 <p style="text-align: justify;">문제에서 생략된 정의는 다음과 같다. 이해가 안 되면 읽어보자.</p>
 
