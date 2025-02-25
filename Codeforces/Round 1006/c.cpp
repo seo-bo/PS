@@ -18,50 +18,32 @@ int main(void)
 		}
 		vector<ll>ans;
 		ll p = 0, i = 0;
+		bool flag = true;
 		for (; (int)ans.size() < n - 1 && i <= m; ++i)
 		{
 			if (i & (~m))
 			{
-				continue;
+				flag = false;
+				break;
 			}
 			ans.push_back(i);
 			p |= i;
 		}
-		ll aa = m ^ p;
-		if (aa == 0)
+		if (flag)
 		{
-			for (; (int)ans.size() < n && i <= m; ++i)
+			if ((p | i) == m)
 			{
-				if (i & (~m))
-				{
-					continue;
-				}
 				ans.push_back(i);
-				p |= i;
 			}
-			while ((int)ans.size() < n)
+			else
 			{
-				ans.push_back(0);
+				ans.push_back(m);
 			}
 		}
-		else
+		while ((int)ans.size() < n)
 		{
-			ans.push_back(aa);
-			for (; (int)ans.size() < n && i <= m; ++i)
-			{
-				if (i & (~m))
-				{
-					continue;
-				}
-				ans.push_back(i);
-				p |= i;
-			}
-			while ((int)ans.size() < n)
-			{
-				ans.push_back(0);
-			}
+			ans.push_back(m);
 		}
-		ll res = 0;
 		for (auto& i : ans)
 		{
 			cout << i << ' ';
