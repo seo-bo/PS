@@ -60,6 +60,7 @@ int main(void)
 	{
 		int a = 0, b = 0, c = 0, d = 0;
 		cin >> a >> b >> c >> d;
+		assert((a <= c) && (b <= d) && (a <= b) && (c <= d));
 		if (c <= b) // a c b d
 		{
 			cout << max({ query(1, n, 1, c, b).maxi, query(1, n, 1, a, c - 1).suffix + query(1, n, 1, c, d).prefix, query(1, n, 1, a, b).suffix + query(1, n, 1, b + 1, d).prefix }) << '\n';
