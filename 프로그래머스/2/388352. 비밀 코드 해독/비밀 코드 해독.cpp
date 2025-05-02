@@ -5,37 +5,33 @@ typedef long long ll;
 int solution(int n, vector<vector<int>> q, vector<int> ans) {
     int answer = 0;
     int len = ans.size();
-    function<void(int,int, int)> dfs = [&] (int mask, int depth, int pre)
+    for(int i =0; i<(1<<n);++i)
+    {
+        if(__builtin_popcount(i) != 5)
         {
-            if(depth == 5)
+            continue;
+        }
+        auto cal = [&] (int mask)
+        {
+            int temp = 0;
+            for(int j =0; j<len;++j)
             {
-                for(int i =0; i<len;++i)
+                int temp = 0;
+                for(auto & k : q[j])
                 {
-                    int temp = 0;
-                    for(auto & j : q[i])
+                    if(mask & (1<<(k-1)))
                     {
-                        if(mask & (1<<j))
-                        {
-                            temp++;
-                        }
-                    }
-                    if(ans[i] != temp)
-                    {
-                        return;
-                    }
+                        temp++;
+                    }       
                 }
-                answer++;
-                return;
-            }
-            for(int i=pre+1; i<=n;++i)
-            {
-                if(mask & (1<<i))
+                if(temp != ans[j])
                 {
-                    continue;
+                    return false;
                 }
-                dfs(mask | (1<<i), depth + 1,i);
             }
+            return true;
         };
-    dfs(0,0,0);
+        answer += cal(i);
+    }
     return answer;
 }
