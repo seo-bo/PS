@@ -7,12 +7,11 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	ll n = 0, m = 0, k = 0;
 	cin >> n >> m >> k;
-	vector<ll>v(n);
+	vector<ll>v(n), mm((1 << 18), 0);
 	for (auto& i : v)
 	{
 		cin >> i;
 	}
-	map<ll, ll>mm;
 	int right = 0;
 	ll ans = 0;
 	for (int i = 0; i < n; ++i)
