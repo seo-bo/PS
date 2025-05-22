@@ -11,7 +11,7 @@ int main(void)
 	{
 		ll n = 0, ans = 0;
 		cin >> n;
-		ll st = max(1LL, n - 5);
+		ll st = max(1LL, n - 3);
 		for (ll i = st; i <= n; ++i)
 		{
 			for (ll j = i + 1; j <= n; ++j)
