@@ -34,7 +34,7 @@ int main(void)
 	while (left <= right)
 	{
 		ll mid = (left + right) >> 1;
-		set<ll>ss;
+		unordered_set<ll>ss;
 		bool flag = false;
 		for (int i = 1; i + mid - 1 <= len; ++i)
 		{
