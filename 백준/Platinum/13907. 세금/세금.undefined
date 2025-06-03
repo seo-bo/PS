@@ -19,19 +19,15 @@ int main(void)
 		graph[a].push_back(make_pair(b, c));
 		graph[b].push_back(make_pair(a, c));
 	}
-	priority_queue<tp, vector<tp>, greater<tp>>pq;
-	pq.push(make_tuple(0, 0, st));
+	queue<tp>q;
+	q.push(make_tuple(0, 0, st));
 	vector<vector<int>>visited(n + 1, vector<int>(n + 1, INT_MAX));
 	visited[st][0] = 0;
-	while (!pq.empty())
+	while (!q.empty())
 	{
-		auto [cost, cnt, ver] = pq.top();
-		pq.pop();
+		auto [cost, cnt, ver] = q.front();
+		q.pop();
 		if (cnt == n)
-		{
-			continue;
-		}
-		if (visited[ver][cnt] < cost)
 		{
 			continue;
 		}
@@ -40,7 +36,7 @@ int main(void)
 			if (visited[nv][cnt + 1] > visited[ver][cnt] + nc)
 			{
 				visited[nv][cnt + 1] = visited[ver][cnt] + nc;
-				pq.push(make_tuple(visited[nv][cnt + 1], cnt + 1, nv));
+				q.push(make_tuple(visited[nv][cnt + 1], cnt + 1, nv));
 			}
 		}
 	}
