@@ -7,22 +7,17 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0;
 	cin >> n;
-	vector<ll>v(1);
+	vector<ll>dp(501, -1);
+	dp[0] = 0;
 	for (int i = 0; i < n; ++i)
 	{
-		ll temp = 0;
-		cin >> temp;
-		if (temp <= 500 || temp >= 20000)
+		ll a = 0;
+		cin >> a;
+		if (a <= 500 || a >= 20000)
 		{
 			continue;
 		}
-		v.push_back(temp - 500);
-	}
-	vector<ll>dp(501, -1);
-	dp[0] = 0;
-	int len = v.size() - 1;
-	for (int i = 1; i <= len; ++i)
-	{
+		a -= 500;
 		vector<ll>temp = dp;
 		for (int j = 500; j >= 0; --j)
 		{
@@ -30,8 +25,8 @@ int main(void)
 			{
 				continue;
 			}
-			int p = (j + v[i]) % 500;
-			temp[p] = max(temp[p], dp[j] + v[i]);
+			int p = (j + a) % 500;
+			temp[p] = max(temp[p], dp[j] + a);
 		}
 		dp = move(temp);
 	}
