@@ -22,27 +22,23 @@ int main(void)
 		graph[a].push_back(make_pair(b, c));
 		rev[b].push_back(make_pair(a, c));
 	}
-	auto dijkstra = [&](vector<vector<pll>>& G)
+	auto bfs = [&](vector<vector<pll>>& G)
 		{
 			vector<tp>visited(n + 1, make_tuple(LLONG_MAX, LLONG_MAX, LLONG_MAX));
 			visited[1] = make_tuple(0, 0, 0);
-			priority_queue<pll, vector<pll>, greater<pll>>pq;
-			pq.push(make_pair(0, 1));
-			while (!pq.empty())
+			queue<int>q;
+			q.push(1);
+			while (!q.empty())
 			{
-				auto [co, ver] = pq.top();
-				pq.pop();
-				auto [aa, bb, cc] = visited[ver];
-				if (aa < co)
-				{
-					continue;
-				}
-				for (auto& [a, b] : G[ver])
+				int cur = q.front();
+				q.pop();
+				auto [aa, bb, cc] = visited[cur];
+				for (auto& [a, b] : G[cur])
 				{
 					if (get<0>(visited[a]) > aa + 1)
 					{
 						visited[a] = make_tuple(aa + 1, b + bb + cost[a], b + cc + cost[a]);
-						pq.push(make_pair(aa + 1, a));
+						q.push(a);
 					}
 					else if (get<0>(visited[a]) == aa + 1)
 					{
@@ -53,8 +49,8 @@ int main(void)
 			}
 			return visited;
 		};
-	vector<tp>go = dijkstra(graph);
-	vector<tp>back = dijkstra(rev);
+	vector<tp>go = bfs(graph);
+	vector<tp>back = bfs(rev);
 	ll pivot = LLONG_MAX;
 	for (int i = 2; i <= n; ++i)
 	{
