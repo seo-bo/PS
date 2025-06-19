@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>A(n), P(n), v(n);
+	iota(v.begin(), v.end(), 0);
+	for (auto& i : A)
+	{
+		cin >> i;
+	}
+	for (auto& i : P)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end(), [&](const int& a, const int& b)
+		{
+			return A[a] < A[b];
+		});
+	ll ans = 0;
+	for (int i = 0; i < (1 << n); ++i)
+	{
+		ll prefix = 0, res = 0, now = k;
+		for (int j = 0; j < n; ++j)
+		{
+			if (i & (1 << j))
+			{
+				ll cost = prefix + A[v[j]];
+				now -= cost;
+				if (now < 0)
+				{
+					res = LLONG_MIN;
+					break;
+				}
+				prefix = cost;
+				res += P[v[j]];
+			}
+		}
+		ans = max(ans, res);
+	}
+	cout << ans;
+	return 0;
+}
