@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<pii>v(n);
+	for (auto& [a, b] : v)
+	{
+		cin >> b >> a;
+	}
+	int ans = 0;
+	sort(v.begin(), v.end());
+	multiset<int>temp;
+	for (auto& [b, a] : v)
+	{
+		int pivot = -1;
+		auto p = temp.end();
+		for (auto it = temp.begin(); it != temp.end(); ++it)
+		{
+			if (*it < a && pivot < *it)
+			{
+				pivot = *it;
+				p = it;
+			}
+		}
+		if (pivot == -1)
+		{
+			if (temp.size() < k)
+			{
+				temp.insert(b);
+				ans++;
+			}
+		}
+		else
+		{
+			temp.erase(p);
+			temp.insert(b);
+			ans++;
+		}
+	}
+	cout << ans;
+	return 0;
+}
