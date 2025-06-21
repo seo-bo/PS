@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, ans = 0;
+		cin >> n;
+		for (int i = 1; i <= sqrt(n); ++i)
+		{
+			if (n % i == 0 && gcd(i, n / i) == 1)
+			{
+				ans++;
+			}
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
