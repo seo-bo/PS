@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<ll, ll, ll>tp;
+typedef pair<ll, ll> pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, x = 0, y = 0, k = 0;
+	cin >> n >> k >> x >> y;
+	vector<vector<tp>>graph(n + 1);
+	for (int i = 0; i < x; ++i)
+	{
+		ll a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_tuple(b, c, d));
+		graph[b].push_back(make_tuple(a, c, d));
+	}
+	for (int i = 0; i < y; ++i)
+	{
+		ll a = 0, b = 0, c = 0, d = 1;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_tuple(b, c, d));
+		graph[b].push_back(make_tuple(a, c, d));
+	}
+	vector<ll>visited(n + 1, LLONG_MAX);
+	visited[1] = 0;
+	priority_queue<pll, vector<pll>, greater<pll>>pq;
+	pq.push(make_pair(0, 1));
+	while (!pq.empty())
+	{
+		auto [co, ver] = pq.top();
+		pq.pop();
+		if (visited[ver] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc, tt] : graph[ver])
+		{
+			if (!tt)
+			{
+				if (visited[nv] > visited[ver] + nc)
+				{
+					visited[nv] = visited[ver] + nc;
+					pq.push(make_pair(visited[nv], nv));
+				}
+			}
+			else
+			{
+				if (visited[ver] >= k)
+				{
+					if (visited[nv] > visited[ver] + nc)
+					{
+						visited[nv] = visited[ver] + nc;
+						pq.push(make_pair(visited[nv], nv));
+					}
+				}
+				else
+				{
+					if (visited[nv] > k + nc)
+					{
+						visited[nv] = k + nc;
+						pq.push(make_pair(visited[nv], nv));
+					}
+				}
+			}
+		}
+	}
+	cout << visited[n];
+	return 0;
+}
