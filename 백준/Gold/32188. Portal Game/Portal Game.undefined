@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, c = 0;
+	cin >> n >> c;
+	vector<int>red(n + 1, -1), blue(n + 1, -1);
+	for (int i = 0; i < c; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		if (!a)
+		{
+			red[b] = c;
+		}
+		else
+		{
+			blue[b] = c;
+		}
+	}
+	vector<int>visited(n + 1, INT_MAX);
+	deque<int>dq;
+	dq.push_back(0);
+	visited[0] = 0;
+	while (!dq.empty())
+	{
+		int cur = dq.front();
+		dq.pop_front();
+		if (cur == n - 1)
+		{
+			cout << visited[cur];
+			return 0;
+		}
+		if (red[cur] != -1)
+		{
+			if (visited[red[cur]] > visited[cur])
+			{
+				visited[red[cur]] = visited[cur];
+				dq.push_front(red[cur]);
+			}
+		}
+		else if (blue[cur] != -1)
+		{
+			if (visited[blue[cur]] > visited[cur])
+			{
+				visited[blue[cur]] = visited[cur];
+				dq.push_front(blue[cur]);
+			}
+			if (visited[cur + 1] > visited[cur] + 1)
+			{
+				visited[cur + 1] = visited[cur] + 1;
+				dq.push_back(cur + 1);
+			}
+		}
+		else
+		{
+			if (visited[cur + 1] > visited[cur] + 1)
+			{
+				visited[cur + 1] = visited[cur] + 1;
+				dq.push_back(cur + 1);
+			}
+		}
+	}
+	cout << -1;
+	return 0;
+}
