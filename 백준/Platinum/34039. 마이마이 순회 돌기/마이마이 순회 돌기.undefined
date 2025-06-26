@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+#define P 100500
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, q = 0;
+	cin >> n >> q;
+	vector<pll>tree(4 * P + 5);
+	function<void(int, int, int, int, bool)>update = [&](int start, int end, int node, int delta, bool flag)
+		{
+			if (delta < start || delta > end)
+			{
+				return;
+			}
+			if (start == end)
+			{
+				if (flag)
+				{
+					tree[node].first += delta;
+					tree[node].second++;
+				}
+				else
+				{
+					tree[node].first -= delta;
+					tree[node].second--;
+				}
+				return;
+			}
+			int mid = (start + end) >> 1;
+			update(start, mid, node * 2, delta, flag);
+			update(mid + 1, end, node * 2 + 1, delta, flag);
+			tree[node].first = (tree[node * 2].first + tree[node * 2 + 1].first);
+			tree[node].second = (tree[node * 2].second + tree[node * 2 + 1].second);
+		};
+	function<ll(int, int, int, ll)> query = [&](int start, int end, int node, ll T)
+		{
+			if (start == end)
+			{
+				return min(tree[node].second, T / start);
+			}
+			int mid = (start + end) >> 1;
+			if (tree[node * 2].first <= T)
+			{
+				return tree[node * 2].second + query(mid + 1, end, node * 2 + 1, T - tree[node * 2].first);
+			}
+			return query(start, mid, node * 2, T);
+		};
+	int idx = n + 1;
+	vector<int>v(n + q + 100, -1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		update(1, P, 1, v[i], true);
+	}
+	while (q--)
+	{
+		ll a = 0, b = 0, c = 0;
+		cin >> a >> b;
+		if (a == 1)
+		{
+			update(1, P, 1, v[b], false);
+			cin >> c;
+			v[b] = c;
+			update(1, P, 1, v[b], true);
+		}
+		else if (a == 2)
+		{
+			cout << query(1, P, 1, b) << '\n';
+		}
+		else
+		{
+			v[idx] = b;
+			update(1, P, 1, v[idx], true);
+			idx++;
+		}
+	}
+	return 0;
+}
