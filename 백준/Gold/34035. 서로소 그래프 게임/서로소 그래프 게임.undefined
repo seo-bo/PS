@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0;
+		cin >> n;
+		cout << ((n == 2) ? "kang" : "chan") << '\n';
+	}
+	return 0;
+}
