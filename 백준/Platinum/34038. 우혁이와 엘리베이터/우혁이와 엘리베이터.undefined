@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll> pll;
+typedef tuple<ll, ll, ll> tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, m = 0, e = 0, k = 0, t1 = 0, t2 = 0;
+	cin >> n >> m >> e >> k >> t1 >> t2;
+	vector<vector<pll>>graph(n + 1);
+	vector<vector<int>>edge(n + 1, vector<int>(n + 1, INT_MAX));
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		vector<int>temp(a);
+		for (auto& j : temp)
+		{
+			cin >> j;
+		}
+		sort(temp.begin(), temp.end());
+		for (int i = 0; i < a; ++i)
+		{
+			if (i - 1 >= 0)
+			{
+				edge[temp[i]][temp[i - 1]] = min(edge[temp[i]][temp[i - 1]], b);
+			}
+			if (i + 1 < a)
+			{
+				edge[temp[i]][temp[i + 1]] = min(edge[temp[i]][temp[i + 1]], b);
+			}
+		}
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			if (edge[i][j] != INT_MAX)
+			{
+				graph[i].push_back(make_pair(j, edge[i][j]));
+			}
+		}
+	}
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	vector<vector<ll>>visited(n + 1, vector<ll>(k + 1, LLONG_MAX));
+	visited[1][0] = 0;
+	pq.push(make_tuple(0, 0, 1));
+	while (!pq.empty())
+	{
+		auto [co, walk, ver] = pq.top();
+		pq.pop();
+		if (visited[ver][walk] < co)
+		{
+			continue;
+		}
+		if (walk < k)
+		{
+			if (ver - 1 >= 1)
+			{
+				if (visited[ver - 1][walk + 1] > visited[ver][walk] + t1 + walk * t2)
+				{
+					visited[ver - 1][walk + 1] = visited[ver][walk] + t1 + walk * t2;
+					pq.push(make_tuple(visited[ver - 1][walk + 1], walk + 1, ver - 1));
+				}
+			}
+			if (ver + 1 <= n)
+			{
+				if (visited[ver + 1][walk + 1] > visited[ver][walk] + t1 + walk * t2)
+				{
+					visited[ver + 1][walk + 1] = visited[ver][walk] + t1 + walk * t2;
+					pq.push(make_tuple(visited[ver + 1][walk + 1], walk + 1, ver + 1));
+				}
+			}
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (visited[nv][walk] > visited[ver][walk] + nc * abs(nv - ver))
+			{
+				visited[nv][walk] = visited[ver][walk] + nc * abs(nv - ver);
+				pq.push(make_tuple(visited[nv][walk], walk, nv));
+			}
+		}
+	}
+	ll ans = LLONG_MAX;
+	for (int i = 0; i <= k; ++i)
+	{
+		ans = min(ans, visited[e][i]);
+	}
+	cout << ((ans == LLONG_MAX) ? -1 : ans);
+	return 0;
+}
