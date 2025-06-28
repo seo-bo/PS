@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	for (int _ = 1; _ <= T; ++_)
+	{
+		int n = 0, m = 0;
+		cin >> n >> m;
+		cin.ignore();
+		vector<vector<int>>v(m);
+		for (int i = 0; i < m; ++i)
+		{
+			string str, temp;
+			getline(cin, str);
+			stringstream ss(str);
+			while (ss >> temp)
+			{
+				ll p = stoll(temp);
+				v[i].push_back(--p);
+			}
+		}
+		vector<char>ans(30, 'Z');
+		for (int i = 0; i < (1 << m); ++i)
+		{
+			int mask = 0;
+			vector<char>temp;
+			for (int j = 0; j < m; ++j)
+			{
+				if (i & (1 << j))
+				{
+					temp.push_back(char(j + 'A'));
+					for (auto& k : v[j])
+					{
+						mask |= (1 << k);
+					}
+				}
+			}
+			if (mask != (1 << n) - 1)
+			{
+				continue;
+			}
+			if (temp.size() < ans.size())
+			{
+				ans = temp;
+			}
+		}
+		cout << format("Data Set {}: ", _);
+		for (auto& i : ans)
+		{
+			cout << i << ' ';
+		}
+		cout << "\n\n";
+	}
+	return 0;
+}
