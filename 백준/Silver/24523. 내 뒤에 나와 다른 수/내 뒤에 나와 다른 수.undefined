@@ -1,20 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef pair<int, int>pii;
 
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0;
 	cin >> n;
-	deque<pii>dq;
+	deque<int>dq;
 	for (int i = 1; i <= n; ++i)
 	{
 		int temp = 0;
 		cin >> temp;
-		dq.push_back(make_pair(temp, i));
-		while (!dq.empty() && dq.front().first != dq.back().first)
+		dq.push_back(temp);
+		while (!dq.empty() && dq.front() != dq.back())
 		{
 			cout << i << ' ';
 			dq.pop_front();
