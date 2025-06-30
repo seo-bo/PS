@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll> pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<ll>idx(m + 1), prefix(m + 1);
+	for (int i = 1; i <= m; ++i)
+	{
+		cin >> idx[i] >> prefix[i];
+		prefix[i] = -prefix[i] + prefix[i - 1];
+	}
+	idx.push_back(n + 1);
+	prefix.push_back(prefix.back());
+	int len = idx.size();
+	vector<ll>dp(len + 1, -1);
+	function<ll(int)> dfs = [&](int day)
+		{
+			if (day == len - 1)
+			{
+				return 0LL;
+			}
+			if (dp[day] != -1)
+			{
+				return dp[day];
+			}
+			ll res = LLONG_MIN / 8;
+			for (int i = day + 1; i < len; ++i)
+			{
+				ll p = (idx[i] - idx[day] - 1);
+				ll sum = (p * (p + 1)) / 2;
+				res = max(res, dfs(i) + sum + prefix[i - 1] - prefix[day]);
+			}
+			return dp[day] = res;
+		};
+	cout << dfs(0);
+	return 0;
+}
