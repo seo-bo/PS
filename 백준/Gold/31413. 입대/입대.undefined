@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>s(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> s[i];
+	}
+	int A = 0, d = 0;
+	cin >> A >> d;
+	vector<vector<int>>dp(n + 10, vector<int>(n + 10, -1));
+	dp[1][0] = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 0; j <= n; ++j)
+		{
+			if (dp[i][j] == -1)
+			{
+				continue;
+			}
+			dp[i + 1][j] = max(dp[i + 1][j], dp[i][j] + s[i]);
+			int pivot = min(n + 1, i + d);
+			dp[pivot][j + 1] = max(dp[pivot][j + 1], dp[i][j] + A);
+		}
+	}
+	int ans = INT_MAX;
+	for (int i = 0; i <= n + 1; ++i)
+	{
+		for (int j = 0; j <= n + 1; ++j)
+		{
+			if (dp[i][j] >= m)
+			{
+				ans = min(ans, j);
+			}
+		}
+	}
+	cout << ((ans == INT_MAX) ? -1 : ans);
+	return 0;
+}
