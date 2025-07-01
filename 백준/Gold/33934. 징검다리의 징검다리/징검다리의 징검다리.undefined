@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, s = 0, e = 0;
+	cin >> n >> s >> e;
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	ll mini = abs(e - s) + 1, maxi = v[s];
+	auto cal1_1 = [&]
+		{
+			for (int i = s - 1; i >= 1; --i)
+			{
+				maxi += v[i];
+				if (v[i] == 1)
+				{
+					break;
+				}
+			}
+		};
+	auto cal1_2 = [&]
+		{
+			for (int i = s - 1; i >= 1; --i)
+			{
+				maxi += v[i];
+				if (v[i] == 1 && i <= e)
+				{
+					break;
+				}
+			}
+		};
+	auto cal2_1 = [&]
+		{
+			for (int i = s + 1; i <= n; ++i)
+			{
+				maxi += v[i];
+				if (v[i] == 1)
+				{
+					break;
+				}
+			}
+		};
+	auto cal2_2 = [&]
+		{
+			for (int i = s + 1; i <= n; ++i)
+			{
+				maxi += v[i];
+				if (v[i] == 1 && i >= e)
+				{
+					break;
+				}
+			}
+		};
+	if (s < e)
+	{
+		if (v[s] != 1)
+		{
+			cal1_1();
+		}
+		cal2_2();
+	}
+	else
+	{
+		if (v[s] != 1)
+		{
+			cal2_1();
+		}
+		cal1_2();
+	}
+	ll k = 0;
+	cin >> k;
+	cout << ((mini <= k && k <= maxi));
+	return 0;
+}
