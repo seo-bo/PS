@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	vector<ll>start(500005, 0), ans(500005, 0), v(500005, 0);
+	map<ll, set<ll>>mm;
+	set<ll>ss;
+	int turn = 0, idx = 1;
+	while (q--)
+	{
+		ll a = 0, b = 0;
+		cin >> a >> b;
+		if (a == 1) // 넣기
+		{
+			if (mm[b].empty())
+			{
+				start[idx] = turn;
+				ss.insert(b);
+			}
+			else if (mm[b].size() == 1)
+			{
+				int pivot = *mm[b].begin();
+				ans[pivot] += turn - start[pivot];
+				start[pivot] = 0;
+				ss.erase(b);
+			}
+			mm[b].insert(idx);
+			v[idx] = b;
+			idx++;
+		}
+		else if (a == 2) // 지우기
+		{
+			ll pivot = v[b];
+			if (mm[pivot].size() == 2)
+			{
+				mm[pivot].erase(b);
+				int po = *mm[pivot].begin();
+				start[po] = turn;
+				ss.insert(pivot);
+				continue;
+			}
+			else if (mm[pivot].size() == 1)
+			{
+				ans[b] += turn - start[b];
+				start[b] = 0;
+				ss.erase(pivot);
+			}
+			mm[pivot].erase(b);
+		}
+		else
+		{
+			if (!ss.empty())
+			{
+				ll pivot = *prev(ss.end());
+				ans[*mm[pivot].begin()] += b;
+			}
+			turn++;
+		}
+	}
+	for (auto& [a, b] : mm)
+	{
+		if (b.size() == 1)
+		{
+			ans[*b.begin()] += turn - start[*b.begin()];
+		}
+	}
+	for (int i = 1; i < idx; ++i)
+	{
+		cout << ans[i] << '\n';
+	}
+	return 0;
+}
