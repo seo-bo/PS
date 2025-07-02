@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<string>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	vector<vector<int>>dp(27, vector<int>(k + 1, 0));
+	int ans = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		vector<pii>temp;
+		int pivot = 0;
+		for (int j = 0; j < k; ++j)
+		{
+			int a = v[i][j] - 'a';
+			pivot = max(pivot, dp[a][j]);
+			temp.push_back(make_pair(a, j));
+		}
+		for (auto& [a, b] : temp)
+		{
+			dp[a][b] = pivot + 1;
+		}
+		ans = max(ans, pivot + 1);
+	}
+	cout << n - ans;
+	return 0;
+}
