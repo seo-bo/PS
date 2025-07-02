@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int dp[101][101][101];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	memset(dp, -1, sizeof(dp));
+	int n = 0, A = 0, B = 0;
+	cin >> n >> A >> B;
+	vector<vector<int>>v(n + 3, vector<int>(3, 0)); // max(정독, 소학습), 휴게, 요양
+	for (int i = 1; i <= n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		for (int j = 0; j < 3; ++j)
+		{
+			cin >> v[i][j];
+		}
+		v[i][0] = max(v[i][0], temp);
+	}
+	function<int(int, int, int)> dfs = [&](int day, int sleep, int study)
+		{
+			if (day > n)
+			{
+				if (study < B)
+				{
+					return INT_MIN / 6;
+				}
+				return 0;
+			}
+			if (dp[day][sleep][study] != -1)
+			{
+				return dp[day][sleep][study];
+			}
+			int res = INT_MIN / 6;
+			if (sleep + 1 <= A) // 요양 or 휴게 + 요양
+			{
+				res = max({ res, dfs(day + 1, sleep + 1, study) + v[day][2], dfs(day + 2, sleep + 1, study) + v[day][1] + v[day + 1][2] });
+			}
+			// 휴게 + 정독 / 소학습
+			res = max(res, dfs(day + 2, sleep, study + (day + 1 <= n)) + v[day][1] + v[day + 1][0]);
+			// 정독 / 소학습
+			res = max(res, dfs(day + 1, sleep, study + 1) + v[day][0]);
+			if (day == n) // 막날 휴게일수도
+			{
+				res = max(res, dfs(day + 1, sleep, study) + v[day][1]);
+			}
+			return dp[day][sleep][study] = res;
+		};
+	cout << dfs(1, 0, 0);
+	return 0;
+}
