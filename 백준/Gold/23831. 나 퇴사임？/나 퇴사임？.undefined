@@ -44,10 +44,6 @@ int main(void)
 			res = max(res, dfs(day + 2, sleep, study + (day + 1 <= n)) + v[day][1] + v[day + 1][0]);
 			// 정독 / 소학습
 			res = max(res, dfs(day + 1, sleep, study + 1) + v[day][0]);
-			if (day == n) // 막날 휴게일수도
-			{
-				res = max(res, dfs(day + 1, sleep, study) + v[day][1]);
-			}
 			return dp[day][sleep][study] = res;
 		};
 	cout << dfs(1, 0, 0);
