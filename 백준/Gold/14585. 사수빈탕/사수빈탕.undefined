@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+ll dp[303][303];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	memset(dp, -1, sizeof(dp));
+	int n = 0, m = 0, A = 0, B = 0;
+	cin >> n >> m;
+	vector<vector<bool>>v(303, vector<bool>(303, false));
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		v[a][b] = true;
+		A = max(A, a);
+		B = max(B, b);
+	}
+	function<ll(int, int)> dfs = [&](int x, int y)
+		{
+			if (x > A || y > B)
+			{
+				return 0LL;
+			}
+			if (dp[x][y] != -1)
+			{
+				return dp[x][y];
+			}
+			ll res = 0, pivot = (m - x - y) * v[x][y];
+			res = max({ res, dfs(x + 1,y) + pivot, dfs(x,y + 1) + pivot });
+			return dp[x][y] = res;
+		};
+	cout << dfs(0, 0);
+	return 0;
+}
