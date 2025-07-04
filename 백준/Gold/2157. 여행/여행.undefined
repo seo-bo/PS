@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef tuple<int, int, int> tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0; i < k; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		if (a >= b)
+		{
+			continue;
+		}
+		graph[a].push_back(make_pair(b, c));
+	}
+	vector<vector<int>>visited(n + 2, vector<int>(m + 2, 0));
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	pq.push(make_tuple(0, 1, 1));
+	while (!pq.empty())
+	{
+		auto [co, cnt, ver] = pq.top();
+		pq.pop();
+		if (visited[ver][cnt] < co || cnt == m)
+		{
+			continue;
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (visited[nv][cnt + 1] < visited[ver][cnt] + nc)
+			{
+				visited[nv][cnt + 1] = visited[ver][cnt] + nc;
+				pq.push(make_tuple(visited[nv][cnt + 1], cnt + 1, nv));
+			}
+		}
+	}
+	int ans = 0;
+	for (int i = 1; i <= m; ++i)
+	{
+		if (visited[n][i] == INT_MAX)
+		{
+			continue;
+		}
+		ans = max(ans, visited[n][i]);
+	}
+	cout << ans;
+	return 0;
+}
