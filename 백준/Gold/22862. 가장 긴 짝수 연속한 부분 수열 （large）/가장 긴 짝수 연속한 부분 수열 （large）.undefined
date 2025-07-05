@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int n = 0, k = 0;
+    cin >> n >> k;
+    vector<int>v(n + 1);
+    for (int i = 1; i <= n; ++i)
+    {
+        cin >> v[i];
+    }
+    int odd = 0, even = 0, ans = 0, left = 1;
+    for (int i = 1; i <= n; ++i)
+    {
+        if (v[i] % 2)
+        {
+            odd++;
+        }
+        else
+        {
+            even++;
+        }
+        while (odd > k)
+        {
+            if (v[left] % 2)
+            {
+                odd--;
+            }
+            else
+            {
+                even--;
+            }
+            left++;
+        }
+        ans = max(ans, even);
+    }
+    cout << ans;
+    return 0;
+}
