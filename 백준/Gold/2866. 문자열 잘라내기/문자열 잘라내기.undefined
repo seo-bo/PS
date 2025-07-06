@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<string>v(m);
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			char temp;
+			cin >> temp;
+			v[j] += temp;
+		}
+	}
+	auto check = [&](int mid)
+		{
+			set<string>ss;
+			for (int i = 0; i < m; ++i)
+			{
+				string pivot;
+				for (int j = 0; j < n; ++j)
+				{
+					if (j <= mid)
+					{
+						continue;
+					}
+					pivot += v[i][j];
+				}
+				if (ss.find(pivot) != ss.end())
+				{
+					return false;
+				}
+				ss.insert(pivot);
+			}
+			return true;
+		};
+	int left = 0, right = n - 2, ans = -1;
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (check(mid))
+		{
+			ans = mid;
+			left = mid + 1;
+		}
+		else
+		{
+			right = mid - 1;
+		}
+	}
+	cout << ans + 1;
+	return 0;
+}
