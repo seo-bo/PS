@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n + 1, 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	vector<int>visited(n + 1, INT_MAX);
+	int a = 0, b = 0;
+	cin >> a >> b;
+	visited[a] = 0;
+	queue<int>q;
+	q.push(a);
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		if (cur == b)
+		{
+			cout << visited[cur];
+			return 0;
+		}
+		for (int i = cur % v[cur]; i <= n; i += v[cur])
+		{
+			if (i == 0)
+			{
+				continue;
+			}
+			if (visited[i] > visited[cur] + 1)
+			{
+				visited[i] = visited[cur] + 1;
+				q.push(i);
+			}
+		}
+	}
+	cout << -1;
+	return 0;
+}
