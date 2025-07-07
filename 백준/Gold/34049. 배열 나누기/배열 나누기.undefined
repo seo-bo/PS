@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0;
+	cin >> n;
+	vector<ll>parent(n + 1), sum(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	for (ll i = 1; i <= n; ++i)
+	{
+		cin >> sum[i];
+	}
+	function<ll(ll)>find = [&](ll root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](ll a, ll b)
+		{
+			ll r1 = find(a), r2 = find(b);
+			if (r1 < r2)
+			{
+				parent[r2] = r1;
+				sum[r1] += sum[r2];
+				sum[r2] = 0;
+			}
+			else
+			{
+				parent[r1] = r2;
+				sum[r2] += sum[r1];
+				sum[r1] = 0;
+			}
+		};
+	ll flag = 0;
+	for (ll i = 1; i <= n; ++i)
+	{
+		if (sum[i] < 0)
+		{
+			if (flag)
+			{
+				merge(i - 1, i);
+			}
+			else
+			{
+				flag ^= 1;
+			}
+		}
+		else
+		{
+			if (!flag)
+			{
+				continue;
+			}
+			flag ^= 1;
+			ll pivot = find(i - 1);
+			while (1)
+			{
+				ll a = find(pivot - 1);
+				if (a == 0)
+				{
+					cout << -1;
+					return 0;
+				}
+				merge(pivot - 1, pivot);
+				if (sum[find(pivot)] >= 0)
+				{
+					break;
+				}
+				pivot = find(pivot);
+			}
+		}
+	}
+	if (flag)
+	{
+		ll pivot = find(n);
+		while (1)
+		{
+			ll a = find(pivot - 1);
+			if (a == 0)
+			{
+				cout << -1;
+				return 0;
+			}
+			merge(pivot - 1, pivot);
+			if (sum[find(pivot)] >= 0)
+			{
+				break;
+			}
+			pivot = find(pivot);
+		}
+	}
+	set<ll>s;
+	for (ll i = 1; i <= n; ++i)
+	{
+		s.insert(find(i));
+	}
+	cout << s.size();
+	return 0;
+}
