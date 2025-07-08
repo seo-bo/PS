@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		v[i].push_back(i);
+	}
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		if ((int)v[a].size() < (int)v[b].size())
+		{
+			while (!v[a].empty())
+			{
+				v[b].push_back(v[a].back());
+				v[a].pop_back();
+			}
+		}
+		else
+		{
+			while (!v[b].empty())
+			{
+				v[a].push_back(v[b].back());
+				v[b].pop_back();
+			}
+			swap(v[a], v[b]);
+		}
+	}
+	vector<int>ans(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		for (auto& j : v[i])
+		{
+			ans[j] = i;
+		}
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cout << ans[i] << ' ';
+	}
+	return 0;
+}
