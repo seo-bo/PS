@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+typedef long long ll;
+using namespace std;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>prime(10001, true);
+	prime[0] = prime[1] = false;
+	for (int i = 2; i <= 10000; ++i)
+	{
+		if (prime[i])
+		{
+			for (int j = i * i; j <= 10000; j += i)
+			{
+				prime[j] = false;
+			}
+		}
+	}
+	ll a = 0, pre = 2;
+	cin >> a;
+	for (int i = 3; i <= 10000; ++i)
+	{
+		if (prime[i])
+		{
+			if (pre * i > a)
+			{
+				cout << pre * i;
+				return 0;
+			}
+			pre = i;
+		}
+	}
+	return 0;
+}
