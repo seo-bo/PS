@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int dp[101][6002]; // 현재 시간, 현재 당근 가중치
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	memset(dp, -1, sizeof(dp));
+	int n = 0, m = 0, to = 0;
+	cin >> n >> m;
+	vector<pii>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		auto& [a, b] = v[i];
+		cin >> a >> b;
+	}
+	dp[0][1] = 0;
+	for (int i = 1; i <= m; ++i)
+	{
+		for (int j = 1; j <= 5100; ++j)
+		{
+			if (dp[i - 1][j] != -1)
+			{
+				dp[i][j] = max(dp[i][j], dp[i - 1][j] + j);
+			}
+			for (int k = 1; k <= n; ++k)
+			{
+				auto [a, b] = v[k];
+				if (j - b >= 0 && dp[i - 1][j - b] >= a)
+				{
+					dp[i][j] = max(dp[i][j], dp[i - 1][j - b] - a);
+				}
+			}
+		}
+	}
+	int ans = 0;
+	for (int i = 0; i <= 5100; ++i)
+	{
+		ans = max(ans, dp[m][i]);
+	}
+	cout << ans;
+	return 0;
+}
