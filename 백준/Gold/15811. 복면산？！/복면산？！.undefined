@@ -1,0 +1,140 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string a1, a2, a3;
+	cin >> a1 >> a2 >> a3;
+	vector<ll>power(31, 1);
+	for (int i = 1; i <= 30; ++i)
+	{
+		power[i] = power[i - 1] * 10;
+	}
+	reverse(a1.begin(), a1.end());
+	reverse(a2.begin(), a2.end());
+	reverse(a3.begin(), a3.end());
+	vector<ll>visited(26, -1);
+	vector<vector<pii>>idx(26);
+	auto cal = [&](string& str, ll t)
+		{
+			ll len = str.size();
+			for (ll i = 0; i < len; ++i)
+			{
+				ll pivot = ll(str[i] - 'A');
+				visited[pivot] = max(visited[pivot], i);
+			}
+			for (ll i = 0; i < len; ++i)
+			{
+				ll pivot = ll(str[i] - 'A');
+				idx[pivot].push_back(make_pair(t, i));
+			}
+		};
+	cal(a1, 1), cal(a2, 2), cal(a3, 3);
+	vector<char>v;
+	for (ll i = 0; i < 26; ++i)
+	{
+		if (visited[i] != -1)
+		{
+			v.push_back((char)i + 'A');
+		}
+	}
+	sort(v.begin(), v.end(), [&](const char& a, const char& b)
+		{
+			ll A = ll(a - 'A'), B = ll(b - 'A');
+			return visited[A] > visited[B];
+		});
+	ll len = v.size();
+	vector<ll>vis(4, 0);
+	ll A = 0, B = 0, C = 0;
+	function<void(ll, ll, ll)> dfs = [&](ll depth, ll mask, ll pre)
+		{
+			//cout << format("{} {}\n", depth, v[depth]);
+			if (depth == len)
+			{
+				if (A + B == C)
+				{
+					cout << "YES";
+					exit(0);
+				}
+				return;
+			}
+			for (ll i = 0; i < 10; ++i)
+			{
+				if (mask & (1LL << i))
+				{
+					continue;
+				}
+				ll pivot = ll(v[depth] - 'A');
+				for (auto& [a, b] : idx[pivot])
+				{
+					if (a == 1)
+					{
+						vis[1] |= (1LL << b);
+						A += power[b] * i;
+					}
+					else if (a == 2)
+					{
+						vis[2] |= (1LL << b);
+						B += power[b] * i;
+					}
+					else
+					{
+						vis[3] |= (1LL << b);
+						C += power[b] * i;
+					}
+				}
+				ll cur = pre + 1;
+				while (1)
+				{
+					ll p = 1;
+					for (ll i = 1; i <= 3; ++i)
+					{
+						p &= (vis[i] & (1LL << cur));
+					}
+					if (p == 0)
+					{
+						cur--;
+						break;
+					}
+					cur++;
+				}
+				if (cur == -1)
+				{
+					dfs(depth + 1, mask | (1LL << i), -1);
+				}
+				else
+				{
+					ll pp = (cur + 1) % 10;
+					ll pa = A % pp, pb = B % pp, pc = C % pp;
+					if ((pa + pb) % pp == pc)
+					{
+						dfs(depth + 1, mask | (1LL << i), cur);
+					}
+				}
+				for (auto& [a, b] : idx[pivot])
+				{
+					if (a == 1)
+					{
+						vis[1] &= ~(1LL << b);
+						A -= power[b] * i;
+					}
+					else if (a == 2)
+					{
+						vis[2] &= ~(1LL << b);
+						B -= power[b] * i;
+					}
+					else
+					{
+						vis[3] &= ~(1LL << b);
+						C -= power[b] * i;
+					}
+				}
+			}
+		};
+	dfs(0, 0, -1);
+	cout << "NO";
+	return 0;
+}
