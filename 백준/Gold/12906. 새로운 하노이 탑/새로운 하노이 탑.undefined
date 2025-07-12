@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef vector<deque<char>> vq;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    vq v(3);
+    map<string, int>visited;
+    for (int i = 0; i < 3; ++i)
+    {
+        int a = 0;
+        cin >> a;
+        for (int j = 0; j < a; ++j)
+        {
+            char p;
+            cin >> p;
+            v[i].push_front(p);
+        }
+    }
+    auto ok = [&](vq& temp)
+        {
+            string res;
+            for (auto& i : temp)
+            {
+                for (auto& j : i)
+                {
+                    res += j;
+                }
+                res += "@";
+            }
+            return res;
+        };
+    visited[ok(v)] = 0;
+    queue<vq>q;
+    q.push(v);
+    while (!q.empty())
+    {
+        auto cur = q.front();
+        q.pop();
+        string pp = ok(cur);
+        bool flag = true;
+        for (int i = 0; i < 3; ++i)
+        {
+            if (cur[i].empty())
+            {
+                continue;
+            }
+            if (flag)
+            {
+                for (auto& j : cur[i])
+                {
+                    if (j != char(i + 'A'))
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+            for (int j = 0; j < 3; ++j)
+            {
+                if (i == j)
+                {
+                    continue;
+                }
+                auto nxt = cur;
+                char pivot = nxt[i].front();
+                nxt[i].pop_front();
+                nxt[j].push_front(pivot);
+                string t = ok(nxt);
+                if (visited.find(t) == visited.end() || visited[t] > visited[pp] + 1)
+                {
+                    visited[t] = visited[pp] + 1;
+                    q.push(nxt);
+                }
+            }
+        }
+        if (flag)
+        {
+            cout << visited[pp];
+            return 0;
+        }
+    }
+    return 0;
+}
