@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>prime(n + 1, -1);
+	prime[1] = 1;
+	int ans = 1;
+	for (ll i = 2; i <= n; ++i)
+	{
+		if (prime[i] == -1)
+		{
+			ans++;
+			prime[i] = ans;
+			for (ll j = i * i; j <= n; j += i)
+			{
+				prime[j] = ans;
+			}
+		}
+	}
+	cout << ans << '\n';
+	for (int i = 1; i <= n; ++i)
+	{
+		cout << prime[i] << ' ';
+	}
+	return 0;
+}
