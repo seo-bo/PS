@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, h = 0;
+	cin >> n >> h;
+	vector<pii>temp(n);
+	for (auto& [a, b] : temp)
+	{
+		cin >> a >> b;
+	}
+	temp.push_back(make_pair(h + 1, h + 1));
+	sort(temp.begin(), temp.end(), [&](const pii& a, const pii& b)
+		{
+			if (a.first == b.first)
+			{
+				return a.second > b.second;
+			}
+			return a.first < b.first;
+		});
+	vector<ll>pp;
+	{
+		vector<pii>v;
+		auto [L, R] = temp[0];
+		for (int i = 1; i <= n; ++i)
+		{
+			auto [a, b] = temp[i];
+			if (L <= a && a <= R)
+			{
+				L = min(L, a);
+				R = max(R, b);
+			}
+			else
+			{
+				v.push_back(make_pair(L, R));
+				L = a, R = b;
+			}
+		}
+		v.push_back(make_pair(L, R));
+		int ed = 1;
+		for (auto& [a, b] : v)
+		{
+			pp.push_back(a - ed);
+			ed = b + 1;
+		}
+	}
+	sort(pp.begin(), pp.end());
+	int len = pp.size();
+	vector<ll>prefix(len + 2, 0);
+	for (int i = 0; i < len; ++i)
+	{
+		prefix[i + 1] = prefix[i] + pp[i];
+	}
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		ll a = 0;
+		cin >> a;
+		auto it = lower_bound(pp.begin(), pp.end(), a) - pp.begin();
+		ll ans = prefix[len] - prefix[it];
+		cout << ans - (a - 1) * (len - it) << '\n';
+	}
+	return 0;
+}
