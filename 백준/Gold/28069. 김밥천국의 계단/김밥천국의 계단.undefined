@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>visited(n + 1, INT_MAX);
+	visited[0] = 0;
+	queue<int>q;
+	q.push(0);
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		if (visited[cur] <= k && cur == n)
+		{
+			cout << "minigimbob";
+			return 0;
+		}
+		vector<int>temp = { cur + 1, cur + (cur / 2) };
+		for (auto& i : temp)
+		{
+			if (i <= n && visited[i] > visited[cur] + 1)
+			{
+				visited[i] = visited[cur] + 1;
+				q.push(i);
+			}
+		}
+	}
+	cout << "water";
+	return 0;
+}
