@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<ll>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		ll a = 0, b = 0, c = 0;
+		cin >> a >> b;
+		if (a == 1)
+		{
+			cin >> c;
+			for (ll i = b, cur = c; i >= 1 && cur; --i)
+			{
+				ll pivot = min(cur, v[i]);
+				v[i] += pivot;
+				cur -= pivot;
+			}
+			for (ll i = b + 1, cur = c; i <= n && cur; ++i)
+			{
+				ll pivot = min(cur, v[i]);
+				v[i] += pivot;
+				cur -= pivot;
+			}
+		}
+		else
+		{
+			cout << v[b] << '\n';
+		}
+	}
+	return 0;
+}
