@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, ans = 0;
+	cin >> n >> m;
+	ll cur = 0;
+	priority_queue<int>pq;
+	for (int i = 0; i < n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		pq.push(temp);
+		cur += temp;
+		while (!pq.empty() && cur >= m)
+		{
+			ans++;
+			cur -= pq.top() * 2;
+			pq.pop();
+		}
+	}
+	cout << ans;
+	return 0;
+}
