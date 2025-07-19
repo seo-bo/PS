@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>rev(n + 1), v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> rev[i];
+		v[rev[i]] = i;
+	}
+	set<int>s;
+	vector<pii>ans;
+	for (int i = 1; i <= n && k; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		for (auto i = s.begin(); i != s.lower_bound(v[temp]) && k; ++i)
+		{
+			ans.push_back(make_pair(rev[*i], temp));
+			k--;
+		}
+		s.insert(v[temp]);
+	}
+	if (k)
+	{
+		cout << "No";
+		return 0;
+	}
+	cout << "Yes\n";
+	for (auto& [a, b] : ans)
+	{
+		cout << a << ' ' << b << '\n';
+	}
+	return 0;
+}
